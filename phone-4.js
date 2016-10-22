@@ -5,6 +5,12 @@ var PRICE = 500;
 var ACCESSORY_PRICE = 60;
 var THRESHOLD = 100;
 
+var PHONE_TAX = calcTax(PRICE);
+var ACCESSORY_TAX = calcTax(ACCESSORY_PRICE);
+
+var PHONE_TOTAL = PRICE + PHONE_TAX;
+var ACCESSORY_TOTAL = ACCESSORY_PRICE + ACCESSORY_TAX;
+
 var balance = 2500;
 
 var toSpend = balance - THRESHOLD;
@@ -15,11 +21,7 @@ var purchaseTotal = 0;
 var phonesPurchased = 0;
 var accessoriesPurchased = 0;
 
-var phoneTax = calcTax(PRICE);
-var accessoryTax = calcTax(ACCESSORY_PRICE);
 
-var phoneTotal = PRICE + phoneTax;
-var accessoryTotal = ACCESSORY_PRICE + accessoryTax;
 
 function calcTax(purchaseAmount) {
 	return purchaseAmount * TAX;
@@ -31,16 +33,16 @@ function formatPrice(number) {
 
 function buyPhone() {
 	phonesPurchased++;
-	purchaseTotal += phoneTotal;
-	balance -= phoneTotal;
-	toSpend -= phoneTotal;
+	purchaseTotal += PHONE_TOTAL;
+	balance -= PHONE_TOTAL;
+	toSpend -= PHONE_TOTAL;
 }
 
 function buyAccessory() {
 	accessoriesPurchased++;
-	purchaseTotal += accessoryTotal;
-	balance -= accessoryTotal;
-	toSpend -= accessoryTotal;
+	purchaseTotal += ACCESSORY_TOTAL;
+	balance -= ACCESSORY_TOTAL;
+	toSpend -= ACCESSORY_TOTAL;
 }
 
 function printOutput() {
@@ -51,10 +53,10 @@ function printOutput() {
 }
 
 while (toSpend > 0) {
-	if (toSpend > phoneTotal) {
+	if (toSpend > PHONE_TOTAL) {
 		buyPhone();
 		
-	} else if (toSpend > accessoryTotal) {
+	} else if (toSpend > ACCESSORY_TOTAL) {
 		buyAccessory();
 		
 	} else {
