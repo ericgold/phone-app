@@ -1,5 +1,11 @@
 "use strict";
 
+// APP SHOULD BUY PHONES UNTIL NOT ENOUGH MONEY IS LEFT TO BUY 
+// ANOTHER ONE AND STILL HAVE 'THRESHOLD' $ LEFT
+// THEN APP BUYS ACCESSORIES UNTIL SAME CONDITION
+// THEN APP OUTPUTS HOW MANY PHONES AND ACCESSORIES WERE BOUGHT
+// AND HOW MUCH MONEY REMAINS IN THE ACCOUNT
+
 var TAX = 0.09;
 var PRICE = 500;
 var ACCESSORY_PRICE = 60;
@@ -33,11 +39,12 @@ function formatPrice(number) {
 // PURCHASE FUNCTION **********************
 // increments count of items purchased 
 
-function countPurchase() {
+function countPurchase(number) {
 	var count = 0;
 
-	return function() {
-		count++;
+	return function(number) {
+		count+=number;
+		return count;
 	}
 
 }
@@ -56,7 +63,6 @@ function calcTotal(amount) {
 	return function() {
 		count += amount;
 		return count;
-		
 	}	
 	
 }
@@ -75,56 +81,64 @@ function calcBank(amount) {
 	return function() {
 		balance -= amount;
 		return balance;
-		
 	}
 	
 }
 
+var deductPhonePrice = calcBank(PHONE_TOTAL);
+var deductAccessoryPrice = calcBank(ACCESSORY_TOTAL);
+
 
 
 // OUTPUT FUNCTION ************************
-function printOutput() {
-	var total = calcBank(addPhoneToTotal) + calcBank(addAccessoryToTotal);
 
-	console.log("you bought " + buyPhone ()+ " phones");
-	console.log("you bought " + buyAccessory() + " accessories");
-	//console.log("you spent " + formatPrice(purchaseTotal) + " dollars");
-	console.log("you have " + formatPrice(total) + " dollars left");
+
+function printOutput(balance) {
+	var remaining = balance + THRESHOLD;
+	var phonesPurchased = buyPhone(0);
+	var phoneTotal = phonesPurchased * PHONE_TOTAL;
+	var accessoriesPurchased = buyAccessory(0);
+	var accessoryTotal = accessoriesPurchased * ACCESSORY_TOTAL;
+	var totalPurchaseAmount = phoneTotal + accessoryTotal;
 	
-	
+	console.log("you bought " + phonesPurchased + " phones for " + formatPrice(phoneTotal) + " with tax");
+	console.log("you bought " + accessoriesPurchased + " accessories for " + formatPrice(accessoryTotal) + " with tax");
+	console.log("you spent " + formatPrice(totalPurchaseAmount));
+	console.log("you have " + formatPrice(remaining) + " left");
 }
 
 // LOOP ***********************************
-//wrap in IIFE?
-
 
 
 (function() {
 	var checkBank = calcBank(0);
-	console.log(checkBank());
+	var startingFunds = checkBank();
+	console.log("You started with " + formatPrice(startingFunds));
 	
 	var toSpend = checkBank() - THRESHOLD;
-	console.log(toSpend);
+	console.log("You're willing to spend " + formatPrice(toSpend));
+
 
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
 
-			buyPhone();
-			console.log("phone purchased");
-			calcTotal(PHONE_TOTAL);
-			calcBank(PHONE_TOTAL);
+			buyPhone(1);
+			console.log("phone purchased for " + formatPrice(PRICE) + " plus " + formatPrice(PHONE_TAX) + " tax");
+			addPhoneToTotal();
+			deductPhonePrice();
+			checkBank();
 			toSpend -= PHONE_TOTAL;
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
-			buyAccessory();
-			console.log("accessory purchased");
-			calcTotal(ACCESSORY_TOTAL);
-			calcBank(ACCESSORY_TOTAL);
-			
+			buyAccessory(1);
+			console.log("accessory purchased for " + formatPrice(ACCESSORY_PRICE) + " plus " + formatPrice(ACCESSORY_TAX) + " tax");
+			addAccessoryToTotal();
+			deductAccessoryPrice();
+			checkBank();
 			toSpend -= ACCESSORY_TOTAL;
 			
 		} else {
-			printOutput();
+			printOutput(toSpend);
 			break;
 		} 	
 	} 
