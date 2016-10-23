@@ -17,15 +17,6 @@ var ACCESSORY_TAX = calcTax(ACCESSORY_PRICE);
 var PHONE_TOTAL = PRICE + PHONE_TAX;
 var ACCESSORY_TOTAL = ACCESSORY_PRICE + ACCESSORY_TAX;
 
-//var balance = 2500;
-//var toSpend = balance - THRESHOLD;
-
-//var purchaseAmount = 0;
-//var purchaseTotal = 0;
-
-//var phonesPurchased = 0;
-//var accessoriesPurchased = 0;
-
 
 // HELPER FUNCTIONS ***********************
 function calcTax(purchaseAmount) {
@@ -51,25 +42,6 @@ function countPurchase(number) {
 
 var buyPhone = countPurchase();
 var buyAccessory = countPurchase();
-
-
-
-// CART FUNCTION **************************
-// adds amount of purchase (plus tax) to cart total
-
-function calcTotal(amount) {
-	var count = 0;
-
-	return function() {
-		count += amount;
-		return count;
-	}	
-	
-}
-
-var addPhoneToTotal = calcTotal(PHONE_TOTAL);
-var addAccessoryToTotal = calcTotal(ACCESSORY_TOTAL);
-
 
 
 // BANKING FUNCTION ***********************
@@ -113,26 +85,26 @@ function printOutput(balance) {
 (function() {
 	var checkBank = calcBank(0);
 	var startingFunds = checkBank();
+	var currentFunds = checkBank();
 	console.log("You started with " + formatPrice(startingFunds));
 	
-	var toSpend = checkBank() - THRESHOLD;
+	var toSpend = currentFunds - THRESHOLD;
 	console.log("You're willing to spend " + formatPrice(toSpend));
-
 
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
 
 			buyPhone(1);
-			console.log("phone purchased for " + formatPrice(PRICE) + " plus " + formatPrice(PHONE_TAX) + " tax");
-			addPhoneToTotal();
+			//console.log("phone purchased for " + formatPrice(PRICE) + " plus " + formatPrice(PHONE_TAX) + " tax");
+			//addPhoneToTotal();
 			deductPhonePrice();
 			checkBank();
 			toSpend -= PHONE_TOTAL;
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
-			console.log("accessory purchased for " + formatPrice(ACCESSORY_PRICE) + " plus " + formatPrice(ACCESSORY_TAX) + " tax");
-			addAccessoryToTotal();
+			//console.log("accessory purchased for " + formatPrice(ACCESSORY_PRICE) + " plus " + formatPrice(ACCESSORY_TAX) + " tax");
+			//addAccessoryToTotal();
 			deductAccessoryPrice();
 			checkBank();
 			toSpend -= ACCESSORY_TOTAL;
