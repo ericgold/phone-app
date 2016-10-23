@@ -57,16 +57,16 @@ function calcBank(amount) {
 	
 }
 
-var deductPhonePrice = calcBank(PHONE_TOTAL);
-var deductAccessoryPrice = calcBank(ACCESSORY_TOTAL);
-
+//var deductPhonePrice = calcBank(PHONE_TOTAL);
+//var deductAccessoryPrice = calcBank(ACCESSORY_TOTAL);
+//var deductPrice = calcBank(amount);
 
 
 // OUTPUT FUNCTION ************************
 
 
 function printOutput(balance) {
-	var remaining = balance + THRESHOLD;
+	var remaining = balance;
 	var phonesPurchased = buyPhone(0);
 	var phoneTotal = phonesPurchased * PHONE_TOTAL;
 	var accessoriesPurchased = buyAccessory(0);
@@ -93,24 +93,21 @@ function printOutput(balance) {
 
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
-
 			buyPhone(1);
-			//console.log("phone purchased for " + formatPrice(PRICE) + " plus " + formatPrice(PHONE_TAX) + " tax");
-			//addPhoneToTotal();
-			deductPhonePrice();
+			calcBank(PHONE_TOTAL);
 			checkBank();
+			currentFunds -= PHONE_TOTAL;
 			toSpend -= PHONE_TOTAL;
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
-			//console.log("accessory purchased for " + formatPrice(ACCESSORY_PRICE) + " plus " + formatPrice(ACCESSORY_TAX) + " tax");
-			//addAccessoryToTotal();
-			deductAccessoryPrice();
+			calcBank(ACCESSORY_TOTAL);
 			checkBank();
+			currentFunds -= ACCESSORY_TOTAL;
 			toSpend -= ACCESSORY_TOTAL;
 			
 		} else {
-			printOutput(toSpend);
+			printOutput(currentFunds);
 			break;
 		} 	
 	} 
