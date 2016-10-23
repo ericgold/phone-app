@@ -19,8 +19,8 @@ var ACCESSORY_TOTAL = ACCESSORY_PRICE + ACCESSORY_TAX;
 
 
 // HELPER FUNCTIONS ***********************
-function calcTax(purchaseAmount) {
-	return purchaseAmount * TAX;
+function calcTax(amount) {
+	return amount * TAX;
 }
 
 function formatPrice(number) {
@@ -54,60 +54,49 @@ function calcBank(amount) {
 		balance -= amount;
 		return balance;
 	}
-	
 }
 
-//var deductPhonePrice = calcBank(PHONE_TOTAL);
-//var deductAccessoryPrice = calcBank(ACCESSORY_TOTAL);
-//var deductPrice = calcBank(amount);
+
 
 
 // OUTPUT FUNCTION ************************
 
-
 function printOutput(balance) {
-	var remaining = balance;
+	var remaining = balance + THRESHOLD;
 	var phonesPurchased = buyPhone(0);
 	var phoneTotal = phonesPurchased * PHONE_TOTAL;
 	var accessoriesPurchased = buyAccessory(0);
 	var accessoryTotal = accessoriesPurchased * ACCESSORY_TOTAL;
 	var totalPurchaseAmount = phoneTotal + accessoryTotal;
 	
-	console.log("you bought " + phonesPurchased + " phones for " + formatPrice(phoneTotal) + " with tax");
-	console.log("you bought " + accessoriesPurchased + " accessories for " + formatPrice(accessoryTotal) + " with tax");
-	console.log("you spent " + formatPrice(totalPurchaseAmount));
-	console.log("you have " + formatPrice(remaining) + " left");
+	console.log("You bought " + phonesPurchased + " phones for " + formatPrice(phoneTotal) + " with tax");
+	console.log("You bought " + accessoriesPurchased + " accessories for " + formatPrice(accessoryTotal) + " with tax");
+	console.log("You spent " + formatPrice(totalPurchaseAmount));
+	console.log("You have " + formatPrice(remaining) + " left");
 }
 
-// LOOP ***********************************
-
+// IIFE/LOOP ***********************************
 
 (function() {
 	var checkBank = calcBank(0);
 	var startingFunds = checkBank();
-	var currentFunds = checkBank();
+	var toSpend = startingFunds - THRESHOLD;
+
 	console.log("You started with " + formatPrice(startingFunds));
-	
-	var toSpend = currentFunds - THRESHOLD;
 	console.log("You're willing to spend " + formatPrice(toSpend));
 
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
 			buyPhone(1);
-			calcBank(PHONE_TOTAL);
-			checkBank();
-			currentFunds -= PHONE_TOTAL;
 			toSpend -= PHONE_TOTAL;
+			
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
-			calcBank(ACCESSORY_TOTAL);
-			checkBank();
-			currentFunds -= ACCESSORY_TOTAL;
 			toSpend -= ACCESSORY_TOTAL;
 			
 		} else {
-			printOutput(currentFunds);
+			printOutput(toSpend);
 			break;
 		} 	
 	} 
