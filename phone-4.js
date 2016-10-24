@@ -47,39 +47,44 @@ var buyAccessory = countPurchase();
 // BANKING FUNCTION ***********************
 // subtracts amount of purchase (plus tax) from bank balance
 
-function calcBank(amount) {
+function calcBank(number) {
 	var balance = 2500;
-
-	return function() {
-		balance -= amount;
+	
+	return function(number) {
+		balance -= number;
 		return balance;
 	}
 }
 
+var checkBank = calcBank();
 
 
 
 // OUTPUT FUNCTION ************************
 
-function printOutput(balance) {
-	var remaining = balance + THRESHOLD;
+function printOutput() {
+	
 	var phonesPurchased = buyPhone(0);
 	var phoneTotal = phonesPurchased * PHONE_TOTAL;
 	var accessoriesPurchased = buyAccessory(0);
 	var accessoryTotal = accessoriesPurchased * ACCESSORY_TOTAL;
 	var totalPurchaseAmount = phoneTotal + accessoryTotal;
+
+	var balance = checkBank(0);
 	
+
+
 	console.log("You bought " + phonesPurchased + " phones for " + formatPrice(phoneTotal) + " with tax");
 	console.log("You bought " + accessoriesPurchased + " accessories for " + formatPrice(accessoryTotal) + " with tax");
 	console.log("You spent " + formatPrice(totalPurchaseAmount));
-	console.log("You have " + formatPrice(remaining) + " left");
+	console.log("You have " + formatPrice(balance) + " left");
 }
 
 // IIFE/LOOP ***********************************
 
 (function() {
-	var checkBank = calcBank(0);
-	var startingFunds = checkBank();
+	
+	var startingFunds = checkBank(0);
 	var toSpend = startingFunds - THRESHOLD;
 
 	console.log("You started with " + formatPrice(startingFunds));
@@ -88,15 +93,18 @@ function printOutput(balance) {
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
 			buyPhone(1);
+			checkBank(PHONE_TOTAL);
 			toSpend -= PHONE_TOTAL;
 			
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
+			checkBank(ACCESSORY_TOTAL);
 			toSpend -= ACCESSORY_TOTAL;
 			
 		} else {
-			printOutput(toSpend);
+			
+			printOutput();
 			break;
 		} 	
 	} 
