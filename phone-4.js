@@ -56,8 +56,8 @@ function calcBank(number) {
 	}
 }
 
+var deductBank = calcBank();
 var checkBank = calcBank();
-
 
 
 // OUTPUT FUNCTION ************************
@@ -69,10 +69,7 @@ function printOutput() {
 	var accessoriesPurchased = buyAccessory(0);
 	var accessoryTotal = accessoriesPurchased * ACCESSORY_TOTAL;
 	var totalPurchaseAmount = phoneTotal + accessoryTotal;
-
-	var balance = checkBank(0);
-	
-
+	var balance = deductBank(0);
 
 	console.log("You bought " + phonesPurchased + " phones for " + formatPrice(phoneTotal) + " with tax");
 	console.log("You bought " + accessoriesPurchased + " accessories for " + formatPrice(accessoryTotal) + " with tax");
@@ -83,7 +80,6 @@ function printOutput() {
 // IIFE/LOOP ***********************************
 
 (function() {
-	
 	var startingFunds = checkBank(0);
 	var toSpend = startingFunds - THRESHOLD;
 
@@ -93,13 +89,13 @@ function printOutput() {
 	while (toSpend > 0) {
 		if (toSpend > PHONE_TOTAL) {
 			buyPhone(1);
-			checkBank(PHONE_TOTAL);
+			deductBank(PHONE_TOTAL);
 			toSpend -= PHONE_TOTAL;
 			
 			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
-			checkBank(ACCESSORY_TOTAL);
+			deductBank(ACCESSORY_TOTAL);
 			toSpend -= ACCESSORY_TOTAL;
 			
 		} else {
