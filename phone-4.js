@@ -92,14 +92,12 @@ function printOutput() {
 			deductBank(PHONE_TOTAL);
 			toSpend -= PHONE_TOTAL;
 			
-			
 		} else if (toSpend > ACCESSORY_TOTAL) {
 			buyAccessory(1);
 			deductBank(ACCESSORY_TOTAL);
 			toSpend -= ACCESSORY_TOTAL;
-			
+
 		} else {
-			
 			printOutput();
 			break;
 		} 	
