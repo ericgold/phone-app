@@ -12,26 +12,24 @@
 	var ACCESSORY_PRICE = 60;
 	var THRESHOLD = 100;
 
-	var PHONE_TAX = calcTax(PRICE); //need this.calcTax(PRICE) here???
-	var ACCESSORY_TAX = calcTax(ACCESSORY_PRICE);
-
-	var PHONE_TOTAL = PRICE + PHONE_TAX;
-	var ACCESSORY_TOTAL = ACCESSORY_PRICE + ACCESSORY_TAX;
-
-
 	// HELPER FUNCTIONS ***********************
-	exports.calcTax = function(amount) {
+	calcTax = function(amount) {
 		return amount * TAX;
 	}
 
-	exports.formatPrice = function(number) {
+	formatPrice = function(number) {
 		return "$"+parseFloat(Math.round(number * 100) / 100).toFixed(2);
 	}
+
+	var PHONE_TAX = calcTax(PRICE); //need this.calcTax(PRICE) here???
+	var ACCESSORY_TAX = calcTax(ACCESSORY_PRICE);
+	var PHONE_TOTAL = PRICE + PHONE_TAX;
+	var ACCESSORY_TOTAL = ACCESSORY_PRICE + ACCESSORY_TAX;
 
 	// PURCHASE FUNCTION **********************
 	// increments count of items purchased 
 
-	exports.countPurchase = function(number) {
+	countPurchase = function(number) {
 		var count = 0;
 
 		return function(number) {
@@ -48,7 +46,7 @@
 	// BANKING FUNCTION ***********************
 	// subtracts amount of purchase (plus tax) from bank balance
 
-	exports.calcBank = function(number) {
+	calcBank = function(number) {
 		var balance = 2500;
 		
 		return function(number) {
@@ -63,7 +61,7 @@
 
 	// OUTPUT FUNCTION ************************
 
-	exports.printOutput = function() {
+	printOutput = function() {
 		
 		var phonesPurchased = buyPhone(0);
 		var phoneTotal = phonesPurchased * PHONE_TOTAL;
@@ -77,6 +75,11 @@
 		console.log("You spent " + formatPrice(totalPurchaseAmount));
 		console.log("You have " + formatPrice(balance) + " left");
 	}
+
+	// EXPORT FUNCTIONS ****************************
+
+	exports.calcTax = calcTax;
+	exports.formatPrice = formatPrice;
 
 	// IIFE/LOOP ***********************************
 
@@ -105,6 +108,6 @@
 		} 
 	};
 
-})(this.phoneSpree = {});
+})(typeof window === 'undefined' || window === null ? global.phoneSpree = {} : window.phoneSpree = {});
 
 phoneSpree.startSpree();
